@@ -1,4 +1,4 @@
-﻿namespace Loan.API.Models.DTOs
+﻿namespace Loan.API.Models.DTOs.Auth
 {
     public class RegisterDto
     {

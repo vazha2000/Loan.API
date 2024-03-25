@@ -1,4 +1,4 @@
-﻿using Loan.API.Models.DTOs;
+﻿using Loan.API.Models.DTOs.Auth;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

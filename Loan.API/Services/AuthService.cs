@@ -1,6 +1,6 @@
 ﻿using Loan.API.Data;
 using Loan.API.Models;
-using Loan.API.Models.DTOs;
+using Loan.API.Models.DTOs.Auth;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Win32;

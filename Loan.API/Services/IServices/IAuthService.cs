@@ -1,4 +1,4 @@
-﻿using Loan.API.Models.DTOs;
+﻿using Loan.API.Models.DTOs.Auth;
 
 namespace Loan.API.Services.IServices
 {
