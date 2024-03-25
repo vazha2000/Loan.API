@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Loan.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240325153620_initial")]
+    [Migration("20240325164259_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,14 +135,14 @@ namespace Loan.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "802aae21-4209-414f-ac20-ca904e05a27a",
+                            Id = "9bc0ef9f-02a9-4557-b16c-49bd28361992",
                             ConcurrencyStamp = "1",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
-                            Id = "13eb328b-6627-410c-9cef-4af43bb9c0e9",
+                            Id = "cc00c3ab-f510-40cf-b6e5-94fff0acca62",
                             ConcurrencyStamp = "2",
                             Name = "User",
                             NormalizedName = "USER"
