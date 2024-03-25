@@ -17,7 +17,23 @@ namespace Loan.API.Controllers
         }
 
 
-
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            try
+            {
+                var token = await _authService.LoginAsync(loginDto);
+                return Ok(new { Token = token });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         [HttpPost("Accountant")]
         public async Task<IActionResult> AccountantRegister(AccountantRegisterDto registerDto)
         {
