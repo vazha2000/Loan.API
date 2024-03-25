@@ -21,36 +21,53 @@ namespace Loan.API.Services
             _roleManager = roleManager;
         }
 
-        public async Task AccountantRegisterAsync(AccountantRegisterDto registerDto)
+        public async Task AccountantRegisterAsync(RegisterDto registerDto)
         {
-            var accountantExists = await _userManager.FindByNameAsync(registerDto.UserName);
+            await RegisterAsync(registerDto, "Accountant");
+        }
 
-            if (accountantExists != null)
+        public Task<string> LoginAsync(LoginDto loginDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UserRegisterAsync(UserRegisterDto registerDto)
+        {
+            await RegisterAsync(registerDto, "User");
+        }
+
+        private async Task RegisterAsync(RegisterDto registerDto, string role)
+        {
+            var existingUser = await _userManager.FindByNameAsync(registerDto.UserName);
+
+            if (existingUser != null)
             {
-                throw new InvalidOperationException("Accountant with this email already exists");
+                throw new InvalidOperationException($"User with this User Name already exists");
             }
 
-            ApplicationUser Accountant = new()
+            var newUser = new ApplicationUser
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 UserName = registerDto.UserName
             };
 
-            var result = await _userManager.CreateAsync(Accountant, registerDto.Password);
+            if (registerDto is UserRegisterDto userDto)
+            {
+                newUser.Age = userDto.Age;
+                newUser.Salary = userDto.Salary;
+                newUser.IsBlocked = false;
+            }
+
+            var result = await _userManager.CreateAsync(newUser, registerDto.Password);
 
             if (!result.Succeeded)
             {
                 var errors = string.Join("\n", result.Errors.Select(e => e.Description));
-                throw new ArgumentException($"User registration failed: {errors}");
+                throw new ArgumentException($"{role} registration failed: {errors}");
             }
 
-            await _userManager.AddToRoleAsync(Accountant, "Accountant");
-        }
-
-        public Task<string> LoginAsync(LoginDto loginDto)
-        {
-            throw new NotImplementedException();
+            await _userManager.AddToRoleAsync(newUser, role);
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Loan.API.Controllers
         }
 
 
+
         [HttpPost("Accountant")]
         public async Task<IActionResult> AccountantRegister(AccountantRegisterDto registerDto)
         {
@@ -24,6 +25,24 @@ namespace Loan.API.Controllers
             {
                 await _authService.AccountantRegisterAsync(registerDto);
                 return Ok("Accountant registered successfully");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPost("User")]
+        public async Task<IActionResult> UserRegister(UserRegisterDto registerDto)
+        {
+            try
+            {
+                await _authService.UserRegisterAsync(registerDto);
+                return Ok("User registered successfully");
             }
             catch (InvalidOperationException ex)
             {
