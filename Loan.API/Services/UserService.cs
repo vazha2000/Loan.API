@@ -36,12 +36,21 @@ namespace Loan.API.Services
                 throw new NotFoundException($"Loan with id {loanId} not found");
             }
 
-            if (existingLoan.Status != 0)
+            if (await _userManager.IsInRoleAsync(existingUser, "Accountant"))
             {
-                throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
+                _dbContext.Loans.Remove(existingLoan);
             }
 
-            _dbContext.Loans.Remove(existingLoan);
+            else
+            {
+                if (existingLoan.UserId != userId || existingLoan.Status != 0)
+                {
+                    throw new InvalidOperationException($"Loan with id {loanId} cannot be deleted.");
+                }
+
+                _dbContext.Loans.Remove(existingLoan);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
 
@@ -116,7 +125,7 @@ namespace Loan.API.Services
             }
             else
             {
-                if (existingLoan.Status != 0)
+                if (existingLoan.Status != 0 || existingLoan.UserId != userId)
                 {
                     throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
                 }

@@ -117,7 +117,7 @@ namespace Loan.API.Controllers
         }
 
         [HttpDelete("Loans/{loanId}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User, Accountant")]
         public async Task<IActionResult> DeleteUserLoan(Guid loanId)
         {
             try
