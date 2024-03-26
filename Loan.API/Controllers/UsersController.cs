@@ -76,7 +76,8 @@ namespace Loan.API.Controllers
         }
 
         [HttpPut("Loans/{loanId}")]
-        public async Task<IActionResult> GetUserLoan(LoanDto loanDto, Guid loanId)
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> UpdateUserLoan(LoanDto loanDto, Guid loanId)
         {
             try
             {
@@ -95,9 +96,9 @@ namespace Loan.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (InvalidLoanIdFormatException ex)
+            catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
@@ -106,6 +107,7 @@ namespace Loan.API.Controllers
         }
 
         [HttpDelete("Loans/{loanId}")]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteUserLoan(Guid loanId)
         {
             try

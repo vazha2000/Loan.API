@@ -101,6 +101,10 @@ namespace Loan.API.Services
             {
                 throw new NotFoundException($"Loan with id {loanId} not found");
             }
+            if(existingLoan.Status != 0)
+            {
+                throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
+            }
 
             existingLoan.Amount = loanDto.Amount;
             existingLoan.Currency = loanDto.Currency;
