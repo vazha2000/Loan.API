@@ -12,12 +12,17 @@ namespace Loan.API.Data
 
         }
 
+        public DbSet<LoanModel> Loans { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<ApplicationUser>()
                 .Property(x => x.Salary)
+                .HasColumnType("decimal(18, 2)");
+
+            builder.Entity<LoanModel>()
+                .Property(x => x.Amount)
                 .HasColumnType("decimal(18, 2)");
 
             builder.Entity<IdentityRole>().HasData(
