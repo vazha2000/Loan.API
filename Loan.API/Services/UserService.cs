@@ -4,6 +4,7 @@ using Loan.API.Models;
 using Loan.API.Models.DTOs.User;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Loan.API.Services
 {
@@ -39,6 +40,31 @@ namespace Loan.API.Services
             };
 
             return userInfo;
+        }
+
+        public async Task<List<LoanModel>> GetUserLoansAsync(string userId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                throw new NotFoundException($"User with id {userId} not found");
+            }
+
+            var loans = await _dbContext.Loans
+                .Where(x => x.UserId == userId)
+                .Select(x => new LoanModel
+                {
+                    Id = x.Id,
+                    Amount = x.Amount,
+                    Currency = x.Currency,
+                    LoanType = x.LoanType,
+                    Status = x.Status,
+                    Period = x.Period
+                })
+                .ToListAsync();
+
+            return loans;
         }
     }
 }

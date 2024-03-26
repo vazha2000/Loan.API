@@ -45,5 +45,32 @@ namespace Loan.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("Loans")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetUserLoans()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                }
+
+                var userLoansResponse = await _userService.GetUserLoansAsync(userId);
+
+                return Ok(userLoansResponse);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
