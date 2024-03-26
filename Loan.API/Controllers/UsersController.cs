@@ -62,7 +62,7 @@ namespace Loan.API.Controllers
 
                 var userLoansResponse = await _userService.GetUserLoansAsync(userId);
 
-                return Ok(userLoansResponse);
+                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoansResponse });
             }
             catch (NotFoundException ex)
             {
@@ -103,5 +103,7 @@ namespace Loan.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }
