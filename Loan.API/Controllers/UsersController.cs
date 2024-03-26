@@ -49,7 +49,7 @@ namespace Loan.API.Controllers
         }
 
         [HttpGet("Loans")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Accountant")]
         public async Task<IActionResult> GetUserLoans()
         {
             try
@@ -63,7 +63,7 @@ namespace Loan.API.Controllers
 
                 var userLoansResponse = await _userService.GetUserLoansAsync(userId);
 
-                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoansResponse });
+                return Ok(userLoansResponse);
             }
             catch (NotFoundException ex)
             {
@@ -90,7 +90,7 @@ namespace Loan.API.Controllers
 
                 var userLoanResponse = await _userService.UpdateLoanAsync(loanDto, userId, loanId);
 
-                return Ok(userLoanResponse);
+                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoansResponse });
             }
             catch (NotFoundException ex)
             {
