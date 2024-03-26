@@ -46,6 +46,7 @@ namespace Loan.API.Services
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim("Firstname", user.FirstName),
                     new Claim("Lastname", user.LastName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -92,7 +93,8 @@ namespace Loan.API.Services
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
-                UserName = registerDto.UserName
+                UserName = registerDto.UserName,
+                Email = registerDto.Email
             };
 
             if (registerDto is UserRegisterDto userDto)

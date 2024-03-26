@@ -162,12 +162,12 @@ namespace Loan.API.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9bc0ef9f-02a9-4557-b16c-49bd28361992", "1", "Accountant", "ACCOUNTANT" });
+                values: new object[] { "04b1a501-5797-4582-8036-6e40acca45b3", "2", "User", "USER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "cc00c3ab-f510-40cf-b6e5-94fff0acca62", "2", "User", "USER" });
+                values: new object[] { "07884b9b-66e6-4d4d-bb8d-f5a66c0d6ea7", "1", "Accountant", "ACCOUNTANT" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
