@@ -28,6 +28,10 @@ namespace Loan.API.Services
                 throw new NotFoundException($"User with id {userId} not found");
             }
 
+            if(existingUser.IsBlocked == true)
+            {
+                throw new UserBlockedException($"User with id {userId} is blocked and cannot apply for a loan.");
+            }
             var pendingLoanCount = _dbContext.Loans.Count(l => l.UserId == userId && l.Status == 0); // 0 indicates pending loan
             var maxPendingLoanCount = 2;
 

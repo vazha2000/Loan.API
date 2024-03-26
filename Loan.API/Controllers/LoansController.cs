@@ -21,7 +21,7 @@ namespace Loan.API.Controllers
 
         [HttpPost("ApplyforLoan")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ApplyForLoad(LoanDto loanDto)
+        public async Task<IActionResult> ApplyForLoan(LoanDto loanDto)
         {
             try
             {
@@ -38,6 +38,10 @@ namespace Loan.API.Controllers
             catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (UserBlockedException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (ExceedsMaxPendingLoanRequestException ex)
             {
