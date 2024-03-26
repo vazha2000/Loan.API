@@ -1,4 +1,5 @@
 ﻿using Loan.API.Exceptions;
+using Loan.API.Models.DTOs.Auth;
 using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -104,6 +105,30 @@ namespace Loan.API.Controllers
             }
         }
 
+        [HttpDelete("Loans/{loanId}")]
+        public async Task<IActionResult> DeleteUserLoan(Guid loanId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+                if (userId == null)
+                {
+                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                }
+
+                await _userService.DeleteLoanAsync(userId, loanId);
+
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

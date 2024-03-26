@@ -21,6 +21,25 @@ namespace Loan.API.Services
             _userManager = userManager;
         }
 
+        public async Task DeleteLoanAsync(string userId, Guid loanId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                throw new NotFoundException($"User with id {userId} not found");
+            }
+
+            var existingLoan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == loanId);
+            if (existingLoan == null)
+            {
+                throw new NotFoundException($"Loan with id {loanId} not found");
+            }
+
+            _dbContext.Loans.Remove(existingLoan);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<UserInfoDto> GetUserInfoAsync(string userId)
         {
             var existingUser = await _userManager.FindByIdAsync(userId);
