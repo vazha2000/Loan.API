@@ -49,16 +49,26 @@ namespace Loan.API.Controllers
         }
 
         [HttpGet("Loans")]
-        [Authorize(Roles = "User,Accountant")]
-        public async Task<IActionResult> GetUserLoans()
+        [Authorize(Roles = "User, Accountant")]
+        public async Task<IActionResult> GetUserLoans(string? userIdFromBody)
         {
             try
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string userId;
 
-                if (userId == null)
+                if (!string.IsNullOrEmpty(userIdFromBody))
                 {
-                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                    userId = userIdFromBody;
+                }
+                else
+                {
+
+                    userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (userId == null)
+                    {
+                        return Unauthorized("User not authenticated or user ID not found in claims.");
+                    }
                 }
 
                 var userLoansResponse = await _userService.GetUserLoansAsync(userId);
@@ -90,7 +100,7 @@ namespace Loan.API.Controllers
 
                 var userLoanResponse = await _userService.UpdateLoanAsync(loanDto, userId, loanId);
 
-                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoansResponse });
+                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoanResponse });
             }
             catch (NotFoundException ex)
             {
