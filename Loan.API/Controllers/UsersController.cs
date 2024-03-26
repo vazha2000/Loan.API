@@ -1,4 +1,6 @@
 ﻿using Loan.API.Exceptions;
+using Loan.API.Models.DTOs.Auth;
+using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +41,105 @@ namespace Loan.API.Controllers
             catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("Loans")]
+        [Authorize(Roles = "User, Accountant")]
+        public async Task<IActionResult> GetUserLoans(string? userIdFromBody)
+        {
+            try
+            {
+                string userId;
+
+                if (!string.IsNullOrEmpty(userIdFromBody))
+                {
+                    userId = userIdFromBody;
+                }
+                else
+                {
+
+                    userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (userId == null)
+                    {
+                        return Unauthorized("User not authenticated or user ID not found in claims.");
+                    }
+                }
+
+                var userLoansResponse = await _userService.GetUserLoansAsync(userId);
+
+                return Ok(userLoansResponse);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("Loans/{loanId}")]
+        [Authorize(Roles = "User, Accountant")]
+        public async Task<IActionResult> UpdateUserLoan(LoanDto loanDto, Guid loanId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                }
+
+                var userLoanResponse = await _userService.UpdateLoanAsync(loanDto, userId, loanId);
+
+                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoanResponse });
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("Loans/{loanId}")]
+        [Authorize(Roles = "User, Accountant")]
+        public async Task<IActionResult> DeleteUserLoan(Guid loanId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                }
+
+                await _userService.DeleteLoanAsync(userId, loanId);
+
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (Exception ex)
             {
