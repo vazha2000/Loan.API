@@ -1,5 +1,6 @@
 ﻿using Loan.API.Models;
 using Loan.API.Models.DTOs.User;
+using Loan.API.Models.Loan;
 
 namespace Loan.API.Services.IServices
 {
@@ -7,5 +8,6 @@ namespace Loan.API.Services.IServices
     {
         Task<UserInfoDto> GetUserInfoAsync(string userId);
         Task<List<LoanModel>> GetUserLoansAsync(string userId);
+        Task<LoanDto> UpdateLoanAsync(LoanDto loanDto, string userId, Guid loanId);
     }
 }

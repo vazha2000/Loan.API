@@ -2,6 +2,7 @@
 using Loan.API.Exceptions;
 using Loan.API.Models;
 using Loan.API.Models.DTOs.User;
+using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,39 @@ namespace Loan.API.Services
                 .ToListAsync();
 
             return loans;
+        }
+
+        public async Task<LoanDto> UpdateLoanAsync(LoanDto loanDto, string userId, Guid loanId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId);
+
+            if (existingUser == null)
+            {
+                throw new NotFoundException($"User with id {userId} not found");
+            }
+
+            var existingLoan = await _dbContext.Loans.FirstOrDefaultAsync(x => x.Id == loanId);
+            if (existingLoan == null)
+            {
+                throw new NotFoundException($"Loan with id {loanId} not found");
+            }
+
+            existingLoan.Amount = loanDto.Amount;
+            existingLoan.Currency = loanDto.Currency;
+            existingLoan.Period = loanDto.Period;
+            existingLoan.LoanType = loanDto.LoanType;
+
+            await _dbContext.SaveChangesAsync();
+
+            LoanDto updatedLoan = new()
+            {
+                Amount = loanDto.Amount,
+                Currency = loanDto.Currency,
+                Period = loanDto.Period,
+                LoanType = loanDto.LoanType
+            };
+
+            return updatedLoan;
         }
     }
 }

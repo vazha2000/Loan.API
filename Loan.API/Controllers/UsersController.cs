@@ -1,4 +1,5 @@
 ﻿using Loan.API.Exceptions;
+using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -64,6 +65,36 @@ namespace Loan.API.Controllers
                 return Ok(userLoansResponse);
             }
             catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("Loans/{loanId}")]
+        public async Task<IActionResult> GetUserLoan(LoanDto loanDto, Guid loanId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == null)
+                {
+                    return Unauthorized("User not authenticated or user ID not found in claims.");
+                }
+
+                var userLoanResponse = await _userService.UpdateLoanAsync(loanDto, userId, loanId);
+
+                return Ok(userLoanResponse);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidLoanIdFormatException ex)
             {
                 return BadRequest(ex.Message);
             }
