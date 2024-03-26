@@ -106,15 +106,26 @@ namespace Loan.API.Services
             {
                 throw new NotFoundException($"Loan with id {loanId} not found");
             }
-            if(existingLoan.Status != 0)
-            {
-                throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
-            }
 
-            existingLoan.Amount = loanDto.Amount;
-            existingLoan.Currency = loanDto.Currency;
-            existingLoan.Period = loanDto.Period;
-            existingLoan.LoanType = loanDto.LoanType;
+            if (await _userManager.IsInRoleAsync(existingUser, "Accountant"))
+            {
+                existingLoan.Amount = loanDto.Amount;
+                existingLoan.Currency = loanDto.Currency;
+                existingLoan.Period = loanDto.Period;
+                existingLoan.LoanType = loanDto.LoanType;
+            }
+            else
+            {
+                if (existingLoan.Status != 0)
+                {
+                    throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
+                }
+
+                existingLoan.Amount = loanDto.Amount;
+                existingLoan.Currency = loanDto.Currency;
+                existingLoan.Period = loanDto.Period;
+                existingLoan.LoanType = loanDto.LoanType;
+            }
 
             await _dbContext.SaveChangesAsync();
 

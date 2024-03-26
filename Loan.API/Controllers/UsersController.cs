@@ -86,7 +86,7 @@ namespace Loan.API.Controllers
         }
 
         [HttpPut("Loans/{loanId}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User, Accountant")]
         public async Task<IActionResult> UpdateUserLoan(LoanDto loanDto, Guid loanId)
         {
             try
