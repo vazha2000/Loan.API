@@ -127,7 +127,10 @@ namespace Loan.API.Services
             {
                 if (existingLoan.Status != 0 || existingLoan.UserId != userId)
                 {
-                    throw new InvalidOperationException($"Loan with id {loanId} cannot be updated because its status is not pending.");
+                    throw new InvalidOperationException($"Loan with id {loanId} " +
+                        $"cannot be updated because " +
+                        $"its status is not pending " +
+                        $"or it does not belong to the user.");
                 }
 
                 existingLoan.Amount = loanDto.Amount;
