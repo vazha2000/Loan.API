@@ -48,7 +48,7 @@ namespace Loan.API.Services
                 Amount = loanDto.Amount,
                 Currency = loanDto.Currency,
                 LoanType = loanDto.LoanType,
-                Status = 0, // pending loan status by default
+                Status = Enums.LoanStatus.InProgress, // pending loan status by default
                 Period = loanDto.Period,
                 UserId = userId,
             };
