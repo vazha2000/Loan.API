@@ -66,6 +66,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddScoped<IAccountantService, AccountantService>();
 // add jwt
 
 builder.Services.AddAuthentication(options =>
