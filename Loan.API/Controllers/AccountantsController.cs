@@ -8,6 +8,7 @@ namespace Loan.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Accountant")]
     public class AccountantsController : ControllerBase
     {
         private readonly IAccountantService _accountantService;
@@ -18,7 +19,6 @@ namespace Loan.API.Controllers
         }
 
         [HttpPost("BlockUser")]
-        [Authorize(Roles = "Accountant")]
         public async Task<IActionResult> BlockUser(string userId)
         {
             try
@@ -47,6 +47,50 @@ namespace Loan.API.Controllers
             catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("AcceptLoan")]
+        public async Task<IActionResult> AcceptLoan(Guid id) // loanId
+        {
+            try
+            {
+                await _accountantService.AcceptLoanAsync(id);
+                return Ok("Loan accepted");
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("RejectLoan")]
+        public async Task<IActionResult> RejectLoan(Guid id)
+        {
+            try
+            {
+                await _accountantService.RejectLoanAsync(id);
+                return Ok("Loan rejected");
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
             catch (Exception ex)
             {

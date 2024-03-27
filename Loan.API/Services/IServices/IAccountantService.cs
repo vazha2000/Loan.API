@@ -4,5 +4,7 @@
     {
         Task BlockUserForUnlimitedTimeAsync(string userId);
         Task UnblockUserAsync(string userId);
+        Task AcceptLoanAsync(Guid loanId);
+        Task RejectLoanAsync(Guid loanId);
     }
 }
