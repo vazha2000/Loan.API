@@ -1,7 +1,9 @@
 ﻿using Loan.API.Enums;
 using Loan.API.Exceptions;
+using Loan.API.Models.DTOs.Auth;
 using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
+using Loan.API.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -117,6 +119,14 @@ namespace Loan.API.Controllers
         [HttpGet("Loans/filter")]
         public async Task<IActionResult> GetFilteredLoans([FromQuery] LoanFilterOptions filterOptions)
         {
+            var validator = new LoanFilterOptionsValidator();
+            var validationResult = await validator.ValidateAsync(filterOptions);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             try
             {
                 var filteredLoans = await _accountantService.GetFilteredLoansAsync(filterOptions);

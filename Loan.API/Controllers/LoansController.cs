@@ -2,6 +2,7 @@
 using Loan.API.Models.Loan;
 using Loan.API.Services;
 using Loan.API.Services.IServices;
+using Loan.API.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,16 @@ namespace Loan.API.Controllers
 
         [HttpPost("ApplyforLoan")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ApplyForLoan(LoanDto loanDto)
+        public async Task<IActionResult> ApplyForLoan([FromBody] LoanDto loanDto)
         {
+            var validator = new LoanDtoValidator();
+            var validationResult = await validator.ValidateAsync(loanDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -93,8 +102,16 @@ namespace Loan.API.Controllers
 
         [HttpPut("Loans/{loanId}")]
         [Authorize(Roles = "User, Accountant")]
-        public async Task<IActionResult> UpdateUserLoan(LoanDto loanDto, Guid loanId)
+        public async Task<IActionResult> UpdateUserLoan([FromBody] LoanDto loanDto, Guid loanId)
         {
+            var validator = new LoanDtoValidator();
+            var validationResult = await validator.ValidateAsync(loanDto);
+
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors);
+            }
+
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

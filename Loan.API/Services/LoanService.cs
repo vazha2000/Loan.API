@@ -46,7 +46,7 @@ namespace Loan.API.Services
             LoanModel newLoan = new()
             {
                 Amount = loanDto.Amount,
-                Currency = loanDto.Currency,
+                Currency = loanDto.Currency.ToUpper(),
                 LoanType = loanDto.LoanType,
                 Status = Enums.LoanStatus.InProgress, // pending loan status by default
                 Period = loanDto.Period,
