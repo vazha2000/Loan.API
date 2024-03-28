@@ -94,10 +94,6 @@ namespace Loan.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
         [HttpPut("Loans/{loanId}")]

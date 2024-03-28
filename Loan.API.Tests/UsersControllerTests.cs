@@ -17,7 +17,7 @@ using Loan.API.Exceptions;
 
 namespace Loan.API.Tests
 {
-    public class UserServiceTests
+    public class UsersControllerTests
     {
         [Fact]
         public async Task GetUserInfo_ValidUserId_ReturnsOkResult()
