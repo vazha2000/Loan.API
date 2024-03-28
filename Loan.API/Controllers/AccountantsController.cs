@@ -1,4 +1,6 @@
-﻿using Loan.API.Exceptions;
+﻿using Loan.API.Enums;
+using Loan.API.Exceptions;
+using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -97,5 +99,34 @@ namespace Loan.API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("Loans")]
+        public async Task<IActionResult> GetAllLoansList()
+        {
+            try
+            {
+                var loans = await _accountantService.GetAllLoansAsync();
+                return Ok(loans);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("Loans/filter")]
+        public async Task<IActionResult> GetFilteredLoans([FromQuery] LoanFilterOptions filterOptions)
+        {
+            try
+            {
+                var filteredLoans = await _accountantService.GetFilteredLoansAsync(filterOptions);
+                return Ok(filteredLoans);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
     }
 }

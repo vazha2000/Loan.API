@@ -1,9 +1,12 @@
 ﻿using Loan.API.Data;
+using Loan.API.Enums;
 using Loan.API.Exceptions;
 using Loan.API.Models;
+using Loan.API.Models.Loan;
 using Loan.API.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net.NetworkInformation;
 
 namespace Loan.API.Services
 {
@@ -55,6 +58,62 @@ namespace Loan.API.Services
             }
 
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<LoanModel>> GetAllLoansAsync()
+        {
+            var loans = await _dbContext.Loans.ToListAsync();
+
+            return MapToLoanModels(loans);
+        }
+
+        public async Task<List<LoanModel>> GetFilteredLoansAsync(LoanFilterOptions filterOptions)
+        {
+
+            IQueryable<LoanModel> query = _dbContext.Loans;
+
+            if (filterOptions.Status.HasValue)
+            {
+                query = query.Where(loan => loan.Status == filterOptions.Status);
+            }
+
+            if (!string.IsNullOrEmpty(filterOptions.Currency))
+            {
+                query = query.Where(loan => loan.Currency == filterOptions.Currency);
+            }
+
+            if (filterOptions.MinAmount.HasValue)
+            {
+                query = query.Where(loan => loan.Amount >= filterOptions.MinAmount);
+            }
+
+            if (filterOptions.MaxAmount.HasValue)
+            {
+                query = query.Where(loan => loan.Amount <= filterOptions.MaxAmount);
+            }
+
+            if (filterOptions.LoanType.HasValue)
+            {
+                query = query.Where(loan => loan.LoanType == filterOptions.LoanType);
+            }
+
+            var loans = await query.ToListAsync();
+            return MapToLoanModels(loans);
+        }
+
+
+        private List<LoanModel> MapToLoanModels(List<LoanModel> loans)
+        {
+            return loans.Select(loan => new LoanModel
+            {
+                Id = loan.Id,
+                Amount = loan.Amount,
+                Currency = loan.Currency,
+                Period = loan.Period,
+                LoanType = loan.LoanType,
+                Status = loan.Status,
+                UserId = loan.UserId
+            }).ToList();
         }
 
         public async Task RejectLoanAsync(Guid loanId)
