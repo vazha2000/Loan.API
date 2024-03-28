@@ -1,3 +1,4 @@
+using FluentValidation;
 using Loan.API.Data;
 using Loan.API.Models;
 using Loan.API.Services;
@@ -66,6 +67,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILoanService, LoanService>();
+builder.Services.AddScoped<IAccountantService, AccountantService>();
+
+//builder.Services.AddTransient<IValidator<EventDto>, EventValidator>();
 // add jwt
 
 builder.Services.AddAuthentication(options =>
