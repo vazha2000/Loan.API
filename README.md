@@ -7,18 +7,18 @@ comprehensive functionality, allowing accountants (administrators) to effectivel
 ## Functionality 
 ### Accountant
 - Accountants possess extensive privileges, enabling them to:
-  - View, modify, and delete loans of any user, irrespective of the loan status.
-  - Exercise authority to block/unblock users or loans as needed.
-  - Retrieve all loans from the database and apply filters to streamline the process.
+- View, modify, and delete loans of any user, irrespective of the loan status.
+- Exercise authority to block/unblock users or loans as needed.
+- Retrieve all loans from the database and apply filters to streamline the process.
 
 ### User
 - Users can leverage a range of functionalities, including:
-  - Registration and authorization facilitated through JWT token authentication.
-  - Access to retrieve their personal information exclusively.
-  - Restriction on users listed in the black list from applying for loans.
-  - Capability to add, update, and delete their loans, with the exception of loans with a status of "pending".
-  - Ability to retrieve and manage their own loans exclusively, without access to other users' information.
-  - Empowerment to submit loan requests with an initial status of "in process".
+- Registration and authorization facilitated through JWT token authentication.
+- Access to retrieve their personal information exclusively.
+- Restriction on users listed in the black list from applying for loans.
+- Capability to add, update, and delete their loans, with the exception of loans with a status of "pending".
+- Ability to retrieve and manage their own loans exclusively, without access to other users' information.
+- Empowerment to submit loan requests with an initial status of "in process".
 
 ### Loan
 - The loan application form encompasses essential details such as loan type (e.g., quick loan, car loan, installment), amount, currency (supporting GEL and USD), duration, and status (comprising options like in process, approved, rejected).
@@ -39,9 +39,19 @@ Once cloned, navigate to the project directory and follow the steps below to set
 
 
  **Install dependencies:**
+- FluentValidation.AspNetCore (latest version)
+- Microsoft.AspNetCore.Authentication.JwtBearer (version 6.0)
+- Microsoft.AspNetCore.Identity.EntityFrameworkCore (version 6.0)
+- Microsoft.AspNetCore.Mvc.NewtonsoftJson (version 6.0)
+- Microsoft.EntityFrameworkCore.SqlServer (version 6.0)
+- Microsoft.EntityFrameworkCore.Tools (version 6.0)
   
- **Set up the database:**
- - add-migration [migration name]
- - update-database
+ **Set up the MS SQL database:**
+- Use Entity Framework Core Migrations to set up the database schema.
+- Open the Package Manager Console in Visual Studio and run the following commands:
+  ```
+  add-migration [migration name]
+  update-database
+  ```
 
 
