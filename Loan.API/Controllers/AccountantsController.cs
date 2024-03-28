@@ -34,10 +34,6 @@ namespace Loan.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
         [HttpPost("UnblockUser")]
@@ -51,10 +47,6 @@ namespace Loan.API.Controllers
             catch (NotFoundException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -74,10 +66,6 @@ namespace Loan.API.Controllers
             {
                 return Conflict(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
         [HttpPost("RejectLoan")]
@@ -96,24 +84,13 @@ namespace Loan.API.Controllers
             {
                 return Conflict(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
         [HttpGet("Loans")]
         public async Task<IActionResult> GetAllLoansList()
         {
-            try
-            {
-                var loans = await _accountantService.GetAllLoansAsync();
-                return Ok(loans);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var loans = await _accountantService.GetAllLoansAsync();
+            return Ok(loans);
         }
 
         [HttpGet("Loans/filter")]
@@ -127,15 +104,8 @@ namespace Loan.API.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
-            try
-            {
-                var filteredLoans = await _accountantService.GetFilteredLoansAsync(filterOptions);
-                return Ok(filteredLoans);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var filteredLoans = await _accountantService.GetFilteredLoansAsync(filterOptions);
+            return Ok(filteredLoans);
         }
 
     }

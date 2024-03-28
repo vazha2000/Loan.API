@@ -29,10 +29,6 @@ namespace Loan.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
         [HttpPost("Accountant")]
         public async Task<IActionResult> AccountantRegister(AccountantRegisterDto registerDto)
@@ -63,10 +59,6 @@ namespace Loan.API.Controllers
             catch (InvalidOperationException ex)
             {
                 return Conflict(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An unexpected error occurred: {ex.Message}");
             }
         }
     }

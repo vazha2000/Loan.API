@@ -94,10 +94,6 @@ namespace Loan.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
         }
 
         [HttpPut("Loans/{loanId}")]
@@ -123,7 +119,7 @@ namespace Loan.API.Controllers
 
                 var userLoanResponse = await _loanService.UpdateLoanAsync(loanDto, userId, loanId);
 
-                return Ok(new { message = "Loan updated successfully", updatedLoan = userLoanResponse });
+                return Ok(userLoanResponse);
             }
             catch (NotFoundException ex)
             {
@@ -132,10 +128,6 @@ namespace Loan.API.Controllers
             catch (InvalidOperationException ex)
             {
                 return StatusCode(403, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -163,10 +155,6 @@ namespace Loan.API.Controllers
             catch (InvalidOperationException ex)
             {
                 return StatusCode(403, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
